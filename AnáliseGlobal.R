@@ -9,7 +9,7 @@ library(GGally)
 library(nnet)
 
 ## Ler Dataset 
-df = read_excel("Desktop/Assimetrias Cranianas/Dataset.xlsx")
+df = read_excel("Desktop/Assimetrias Cranianas /Dataset.xlsx")
 str(df)
 
 
@@ -27,6 +27,10 @@ df[varfac] = lapply(df[varfac], as.factor)
 str(df)
 
 
+## Guardar Variáveis
+attach(df)
+
+
 ## Acrescentar Níveis
 ClasAssimetriaInicial = fct_expand(ClasAssimetriaInicial,"Sem Assimetria")
 ClasAssimetriaInicial = factor(ClasAssimetriaInicial, 
@@ -38,13 +42,9 @@ SatisfaçãoGeralTrat = fct_expand(SatisfaçãoGeralTrat, "Muito Insatisfeito",
           after=0)
 
 
-## Guardar Variáveis
-attach(df)
-
-
 ## Estatísticas Descritivas
 summary(df)
-dfnum = df[, c("IdadeCuidador", "QuantasGestAnteriores", "DuraçãoGestaMeses",
+dfnum = df[, c("IdadeCuidador", "QuantasGestAnteriores", "DuraçãoGestMeses",
                "IdadeBebéMeses", "PesoNasKg", "AlturaNasCm", 
                "PerimCefálicoNasCm", "TempoInternadoDias", "ÍndiceAPGAR", 
                "NúmTrat", "DiasTrat", "DifDiagonaisIniciaisMm", 
@@ -56,7 +56,7 @@ summary(dfnum)
 var(dfnum) 
 var(IdadeCuidador)              ;   sd(IdadeCuidador)         
 var(QuantasGestAnteriores)      ;   sd(QuantasGestAnteriores) 
-var(DuraçãoGestaMeses)          ;   sd(DuraçãoGestaMeses)     
+var(DuraçãoGestMeses)           ;   sd(DuraçãoGestMeses)     
 var(IdadeBebéMeses)             ;   sd(IdadeBebéMeses)  
 var(PesoNasKg)                  ;   sd(PesoNasKg)  
 var(AlturaNasCm)                ;   sd(AlturaNasCm)
@@ -95,9 +95,9 @@ barplot(table(QuantasGestAnteriores), main = "Número de Gestações Anteriores"
         col= "#BAE1FF", ylim = c(0,30))
 
    # Duração Gestação
-boxplot(DuraçãoGestaMeses, main = "Duração da Gestação em meses", 
+boxplot(DuraçãoGestMeses, main = "Duração da Gestação em Meses", 
         horizontal = TRUE, col= "#BAE1FF")
-hist(DuraçãoGestaMeses, main = "Duração da Gestação em meses", col= "#BAE1FF")
+hist(DuraçãoGestMeses, main = "Duração da Gestação em Meses", col= "#BAE1FF")
 
    # Idade do Bebé
 boxplot(IdadeBebéMeses, main = "Idade do Bebé em Meses", horizontal = TRUE, 
@@ -115,9 +115,11 @@ boxplot(AlturaNasCm, main = "Altura no Nascimento em Centímetros",
 hist(AlturaNasCm, main = "Altura no Nascimento em Centímetros", col= "#BAE1FF")
 
    # Perímetro Cefálico
-boxplot(PerimCefálicoNasCm, main = "Perímetro Cefálico em centímetros", 
+boxplot(PerimCefálicoNasCm, main = "Perímetro Cefálico em Centímetros", 
         horizontal = TRUE, col= "#BAE1FF")
-hist(PerimCefálicoNasCm, main = "Perímetro Cefálico em centímetros", 
+boxplot(PerimCefálicoNasCm, main = "Perímetro Cefálico em Centímetros", 
+        horizontal = TRUE, col= "#BAE1FF", outline=FALSE)
+hist(PerimCefálicoNasCm, main = "Perímetro Cefálico em Centímetros", 
      breaks = 10, col= "#BAE1FF")
 
    # Tempo de Internamento 
@@ -135,9 +137,9 @@ barplot(table(NúmTrat), main = "Número de Tratamentos", col= "#BAE1FF",
         ylim = c(0,20))
 
    # Tempo de Tratamento em dias
-boxplot(DiasTrat, main = "Tempo de Tratamento em dias", horizontal = TRUE, 
+boxplot(DiasTrat, main = "Tempo de Tratamento em Dias", horizontal = TRUE, 
         col= "#BAE1FF")
-barplot(table(DiasTrat), main = "Número de Tratamentos", col= "#BAE1FF", 
+barplot(table(DiasTrat), main = "Tempo de Tratamento em Dias", col= "#BAE1FF", 
         ylim = c(0,12))
 
    # Diferenças Diagonais no Início
@@ -231,7 +233,7 @@ barplot(table(TummyTime), main = "Tummy Time", col = c("#FFD1DC","#D5FFBA"),
    # Outra Terapia
 table(OutraTerapia) / 42 * 100
 barplot(table(OutraTerapia), main = "Outra Terapia", 
-        col = c("#FFD1DC","#D5FFBA"),ylim = c(0,60))
+        col = c("#FFD1DC","#D5FFBA"), ylim = c(0,50))
 
    # Encaminhamento Osteopatia Pediátrica
 table(Encaminhamento) / 42 * 100
@@ -242,17 +244,17 @@ barplot(table(Encaminhamento),
    # Outras Patologias
 table(OutrasPatologias) / 42 * 100
 barplot(table(OutrasPatologias), main = "Outras Patologias", 
-        col = c("#FFD1DC","#D5FFBA"), ylim = c(0,60))
+        col = c("#FFD1DC","#D5FFBA"), ylim = c(0,50))
 
    # Lateralidade Plagiocefalia
 table(LateralPlagiocefalia) / 42 * 100
 barplot(table(LateralPlagiocefalia), main = "Lateralidade Plagiocefalia", 
-        col = c("#FFD1DC","#D5FFBA"), ylim = c(0,45))
+        col = c("#FFD1DC","#D5FFBA"), ylim = c(0,50))
 
    # Tratamento Pretendido 
 table(TratPretendido) / 42 * 100
 barplot(table(TratPretendido), main = "Tratamento Pretendido", 
-        col = c("#BAE1FF","#FFD1DC","#D5FFBA"), ylim = c(0,45))
+        col = c("#BAE1FF","#FFD1DC","#D5FFBA"), ylim = c(0,50))
 
     # Termino Tratamento
 table(TerminoTrat) / 42 * 100
@@ -262,7 +264,7 @@ barplot(table(TerminoTrat), main = "Conclusão do Tratamento",
    # Classificação Assimetria Inicial
 table(ClasAssimetriaInicial) / 42 * 100
 barplot(table(ClasAssimetriaInicial), main = "Classificação Assimetria Inicial", 
-        col = c("#BAE1FF","#FFD1DC","#D5FFBA","#FFFFBA"), ylim = c(0,40))
+        col = c("#BAE1FF","#FFD1DC","#D5FFBA","#FFFFBA"), ylim = c(0,50))
 
    # Classificação Assimetria Final
 table(ClasAssimetriaFinal) / 42 * 100
@@ -273,13 +275,13 @@ barplot(table(ClasAssimetriaFinal), main = "Classificação Assimetria Final",
 table(ContribuiçãoDesenvolMotor) / 42 * 100
 barplot(table(ContribuiçãoDesenvolMotor), 
         main = "Contribuição Desenvolvimento Motor", 
-        col = c("#FFD1DC","#D5FFBA"),  ylim = c(0,55))
+        col = c("#FFD1DC","#D5FFBA"),  ylim = c(0,50))
 
     # Contribuição Melhoria Sono
 table(ContribuiçãoMelhoriaSono) / 42 * 100
 barplot(table(ContribuiçãoMelhoriaSono), 
         main = "Contribuição na Melhoria do sono", col = c("#FFD1DC","#D5FFBA"), 
-        ylim = c(0,30))
+        ylim = c(0,50))
 
    # Resposta Necessidade
 table(RespNecessidades) / 42 * 100
@@ -294,7 +296,7 @@ barplot(table(Ajuda), main = "Ajuda",
    # Lidar Problemas
 table(LidarProblemas) / 42 * 100
 barplot(table(LidarProblemas), main = "Ajudou a Lidar com Problemas", 
-        col = c("#FFD1DC","#D5FFBA"), ylim = c(0,40))
+        col = c("#FFD1DC","#D5FFBA"), ylim = c(0,50))
 
    # Voltaria
 table(Voltaria) / 42 * 100
@@ -361,7 +363,7 @@ barplot(tabela, beside = TRUE, col = c("#FFD1DC", "#D5FFBA"),
    # ≥ 0.05	→ Não se rejeita H0 → H0
 shapiro.test(IdadeCuidador) 
 shapiro.test(QuantasGestAnteriores)
-shapiro.test(DuraçãoGestaMeses)
+shapiro.test(DuraçãoGestMeses)
 shapiro.test(IdadeBebéMeses)
 shapiro.test(PesoNasKg) 
 shapiro.test(AlturaNasCm) 
@@ -519,12 +521,12 @@ mod1a = lm(IdadeBebéMeses ~ PesoNasKg, data = df)
 summary(mod1a)
 
    # Modelo 2 : Complicações Parto ~ Idade Cuidados + Duração Gestação
-mod2 = glm(ComplicaçõesParto ~ IdadeCuidador + DuraçãoGestaMeses, 
+mod2 = glm(ComplicaçõesParto ~ IdadeCuidador + DuraçãoGestMeses, 
            data = df, family = "binomial")
 summary(mod2)
 
-   # Modelo 2a : Complicações_Parto ~ Duração_Gestação_Meses
-mod2a = glm(ComplicaçõesParto ~ DuraçãoGestaMeses, data = df,
+   # Modelo 2a : Complicações Parto ~ Duração Gestação Meses
+mod2a = glm(ComplicaçõesParto ~ DuraçãoGestMeses, data = df,
             family = "binomial")
 summary(mod2a)
 
